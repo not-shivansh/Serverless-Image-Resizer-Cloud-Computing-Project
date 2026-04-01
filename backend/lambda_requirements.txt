@@ -1,0 +1,3 @@
+# Lambda deployment dependencies
+# boto3 is already available in the AWS Lambda Python runtime
+pillow==11.3.0
