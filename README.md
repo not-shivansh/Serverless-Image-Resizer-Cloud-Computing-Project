@@ -2,7 +2,6 @@
 
 A **production-grade** cloud-based image resizing system built with AWS serverless architecture. Upload images and instantly generate optimized variants at multiple sizes and formats.
 
-![Architecture](https://assets.community.aws/a/2yTInG8ov6G4k25xqN54u59cm6f/Serv.webp?imgSize=726x527)
 
 ---
 
