@@ -231,3 +231,4 @@ See [`deploy/aws-setup.md`](deploy/aws-setup.md) for the complete step-by-step g
 
 ## 💼 Author
 [Shivansh Thakur](https://www.linkedin.com/in/thakur-shivansh/)
+[Aditya Manhas](https://www.linkedin.com/in/aditya-manhas-224193378/)
