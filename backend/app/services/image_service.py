@@ -15,6 +15,7 @@ from PIL import Image, UnidentifiedImageError
 from app.config import PROCESSED_DIR, UPLOADS_DIR, settings
 from app.schemas import ImageRecord, ImageVariant
 from app.services.metadata_service import MetadataService
+from app.services.ai_detection_service import AIDetectionService
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +32,8 @@ FORMAT_MAP: dict[str, str] = {
 }
 
 # JPEG quality for compression optimization
-JPEG_QUALITY = 85
-WEBP_QUALITY = 80
+JPEG_QUALITY = 95
+WEBP_QUALITY = 95
 
 
 class ImageService:
@@ -75,6 +76,9 @@ class ImageService:
         ]
 
         processing_time = (time.monotonic() - start_time) * 1000
+        
+        # Determine if AI generated
+        ai_result = AIDetectionService.analyze_image(file_bytes, file.filename or "")
 
         record = ImageRecord(
             image_id=image_id,
@@ -84,6 +88,8 @@ class ImageService:
             original_url=original_url,
             variants=variants,
             processing_time_ms=round(processing_time, 2),
+            is_ai_generated=ai_result["is_ai_generated"],
+            ai_confidence=ai_result["ai_confidence"],
         )
         self.metadata.save(record)
         logger.info(
@@ -232,6 +238,9 @@ class ImageService:
 
         processing_time = (time.monotonic() - start_time) * 1000
         original_url = self._s3.generate_public_url(key, bucket=self._s3.input_bucket)
+        
+        # Determine if AI generated
+        ai_result = AIDetectionService.analyze_image(file_bytes, original_filename)
 
         record = ImageRecord(
             image_id=image_id,
@@ -241,6 +250,8 @@ class ImageService:
             original_url=original_url,
             variants=variants,
             processing_time_ms=round(processing_time, 2),
+            is_ai_generated=ai_result["is_ai_generated"],
+            ai_confidence=ai_result["ai_confidence"],
         )
         self.metadata.save(record)
         return record
@@ -285,7 +296,7 @@ class ImageService:
         output_format: str,
     ) -> ImageVariant:
         image = source_image.copy()
-        image.thumbnail(size)
+        image.thumbnail(size, resample=Image.Resampling.LANCZOS)
 
         final_width, final_height = image.size
         suffix = self._normalized_output_format(output_format)

@@ -9,6 +9,7 @@ A **production-grade** cloud-based image resizing system built with AWS serverle
 
 ### Core
 - **Image upload** with drag-and-drop or file picker
+- **AI Image Detection** — Automatically analyzes EXIF metadata and structural signatures to determine if an uploaded image is AI-generated (e.g., Midjourney, DALL-E) and flags it in the UI with a confidence score.
 - **Automatic resizing** into preset sizes:
   - 🔹 Thumbnail: 100×100
   - 🔹 Medium: 300×300
@@ -167,7 +168,7 @@ Switch from local to AWS by changing `IMAGE_RESIZER_STORAGE_BACKEND=s3`.
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/health` | Health check with version and storage backend |
-| `POST` | `/upload` | Upload image and generate preset variants |
+| `POST` | `/upload` | Upload image, run AI detection, and generate preset variants |
 | `GET` | `/image/{image_id}` | Fetch image metadata by ID |
 | `GET` | `/images?limit=20&offset=0` | List recent images with pagination |
 | `GET` | `/resize?image_id=...&width=...&height=...&format=...` | Create custom-sized variant |

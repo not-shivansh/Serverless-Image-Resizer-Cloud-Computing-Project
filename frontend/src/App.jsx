@@ -392,11 +392,18 @@ export default function App() {
                 Preset and custom optimized variants.
               </p>
             </div>
-            {imageRecord && (
-              <code onClick={() => copyUrl(imageRecord.image_id)} title="Click to copy ID">
-                {imageRecord.image_id.slice(0, 12)}…
-              </code>
-            )}
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              {imageRecord && imageRecord.is_ai_generated !== null && imageRecord.is_ai_generated !== undefined && (
+                 <span className="hero-badge" style={{ backgroundColor: imageRecord.is_ai_generated ? "rgba(239, 68, 68, 0.15)" : "rgba(34, 197, 94, 0.15)", color: imageRecord.is_ai_generated ? "#fca5a5" : "#86efac", border: imageRecord.is_ai_generated ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(34,197,94,0.3)" }} title={`Confidence: ${(imageRecord.ai_confidence * 100).toFixed(0)}%`}>
+                   {imageRecord.is_ai_generated ? "🤖 AI Generated" : "📷 Real Image"}
+                 </span>
+              )}
+              {imageRecord && (
+                <code onClick={() => copyUrl(imageRecord.image_id)} title="Click to copy ID">
+                  {imageRecord.image_id.slice(0, 12)}…
+                </code>
+              )}
+            </div>
           </div>
 
           {imageRecord ? (

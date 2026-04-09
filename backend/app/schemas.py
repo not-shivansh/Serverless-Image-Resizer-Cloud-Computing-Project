@@ -24,6 +24,8 @@ class ImageRecord(BaseModel):
     original_url: str
     variants: list[ImageVariant]
     processing_time_ms: float = 0.0
+    is_ai_generated: bool | None = None
+    ai_confidence: float | None = None
 
 
 # ── Responses ────────────────────────────────────────────────
